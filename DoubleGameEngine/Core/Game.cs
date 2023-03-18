@@ -1,5 +1,4 @@
-﻿using DoubleGameEngine.Core;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
@@ -11,7 +10,7 @@ using System.IO;
 using System.Text.Json;
 using Keyboard = DoubleGameEngine.Managers.Keyboard;
 
-namespace DoubleGameEngine
+namespace DoubleGameEngine.Core
 {
     /// <summary>
     /// Игра
@@ -23,7 +22,7 @@ namespace DoubleGameEngine
 
         public ScreenManager ScreenManager { get; }                 // Менеджер экранов
 
-        public Dictionary<string, Keys> Input {get; private set;}   // Ввод
+        public Dictionary<string, Keys> Input { get; private set; }   // Ввод
 
 
         public Game()
@@ -45,7 +44,8 @@ namespace DoubleGameEngine
             SpriteBatch = new SpriteBatch(GraphicsDevice);
             Input = new Dictionary<string, Keys>();
             Dictionary<string, string> input = JsonSerializer.Deserialize<Dictionary<string, string>>(File.ReadAllText("Input.json"));
-            foreach (var pair in input) {
+            foreach (var pair in input)
+            {
                 Input.Add(pair.Key, Enum.Parse<Keys>(pair.Value));
             }
         }

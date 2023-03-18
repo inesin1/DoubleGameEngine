@@ -113,5 +113,20 @@ namespace DoubleGameEngine.GameObjects
                 gameObject1.Position.Y + gameObject1.Size.Y / 2 >= gameObject2.Position.Y - gameObject2.Size.Y / 2 &&
                 gameObject1.Position.Y - gameObject1.Size.Y / 2 <= gameObject2.Position.Y + gameObject2.Size.Y / 2;
         }
+
+        /// <summary>
+        /// Обрабатывает столкновения
+        /// </summary>
+        public void HandleCollision(Side side, GameObject gameObject) {
+            Console.WriteLine("Столкновение с " + gameObject);
+        }
+    }
+
+    public enum Side
+    {
+        Top,
+        Right,
+        Bottom,
+        Left
     }
 }
