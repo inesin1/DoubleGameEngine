@@ -3,6 +3,7 @@ using DoubleGameEngine.GameObjects;
 using DoubleGameEngine.InterfaceItems;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,6 +15,7 @@ namespace DoubleGameEngine.GameScreens
     {
         public new Game Game => base.Game as Game;
         public SpriteBatch SpriteBatch => Game.SpriteBatch;
+        public OrthographicCamera Camera;                                                // Камера
         public Texture2D Background { get; set; }                                        // Текстура заднего фона
 
         public Dictionary<string, GameObject> GameObjects { get; private set; } = new Dictionary<string, GameObject>();           // Игровые объекты
@@ -28,6 +30,8 @@ namespace DoubleGameEngine.GameScreens
         public GameScreen(Game game) : base(game) { Initialize(); }
 
         public override void Initialize() {
+            Camera = new OrthographicCamera(GraphicsDevice);
+
             if (_level != null) {
                 // Парсинг заднего фона
                 Background = Texture2D.FromFile(GraphicsDevice, $@"Levels\{_level}\background.png");
@@ -60,8 +64,10 @@ namespace DoubleGameEngine.GameScreens
 
         public override void Draw(GameTime gameTime)
         {
+            Matrix transformationMatrix = Camera.GetViewMatrix();  
+
             GraphicsDevice.Clear(Color.White);
-            SpriteBatch.Begin(transformMatrix: Camera.TransformationMatrix);
+            SpriteBatch.Begin(transformMatrix: transformationMatrix);
 
             SpriteBatch.Draw(Background, Vector2.Zero, Color.White);
 

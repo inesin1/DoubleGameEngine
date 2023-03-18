@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended;
 using MonoGame.Extended.Screens;
 using MonoGame.Extended.ViewportAdapters;
 using System;
@@ -23,7 +24,7 @@ namespace DoubleGameEngine
         public ScreenManager ScreenManager { get; }                 // Менеджер экранов
 
         public Dictionary<string, Keys> Input {get; private set;}   // Ввод
-        
+
 
         public Game()
         {
@@ -52,7 +53,6 @@ namespace DoubleGameEngine
         protected override void Update(GameTime gameTime)
         {
             Keyboard.Update();
-            Camera.Update();
 
             base.Update(gameTime);
         }
