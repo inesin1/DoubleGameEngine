@@ -38,6 +38,7 @@ namespace DoubleGameEngine.GameObjects
         public Vector2 Size { get; set; } = Vector2.Zero;       // Размер спрайта
         public float Speed { get; set; }                        // Скорость
         public bool IsGrounded { get; set; } = false;           // На земле ли
+        public bool IsFixed { get; set; } = false;              // Зафиксирован ли
         public Vector2 Velocity { get; set; } = new Vector2();  // Значение перемещения
         public Animation? Animation { get; set; }               // Анимация
         public Dictionary<string, Animation>? Animations { get; protected set; } // Список анимаций
@@ -60,6 +61,8 @@ namespace DoubleGameEngine.GameObjects
         /// </summary>
         public virtual void Update(float elapsedTime)
         {
+            Size *= Scale;
+
             Animation?.Update(elapsedTime);
         }
 

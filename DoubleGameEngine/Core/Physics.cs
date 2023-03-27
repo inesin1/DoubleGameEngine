@@ -42,6 +42,10 @@ namespace DoubleGameEngine.Core
         public void Update(float elapsedTime) {
             foreach (GameObject gameObject in _context.GameObjects.Values)
             {
+                if (gameObject.IsFixed) {
+                    continue;
+                }
+
                 Dictionary<Side, Vector2> sidesCoords = new Dictionary<Side, Vector2> {
                         { Side.Top, new Vector2((gameObject.Position.X + gameObject.Size.X / 2) / 16, gameObject.Position.Y / 16) },
                         { Side.Right, new Vector2((gameObject.Position.X + gameObject.Size.X) / 16, (gameObject.Position.Y + gameObject.Size.Y / 2) / 16) },
@@ -54,10 +58,10 @@ namespace DoubleGameEngine.Core
                     HandleIntGrid(elapsedTime, gameObject, sideCoords.Key, sideCoords.Value);
                 }
 
-                gameObject.Velocity += Vector2.UnitY * Gravity;
-
                 if (!gameObject.IsGrounded)
-                    gameObject.Position += gameObject.Velocity * elapsedTime;
+                    gameObject.Velocity += Vector2.UnitY * Gravity;
+
+                gameObject.Position += gameObject.Velocity * elapsedTime;
             }
         }
 
