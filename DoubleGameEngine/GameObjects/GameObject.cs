@@ -36,6 +36,9 @@ namespace DoubleGameEngine.GameObjects
         public float Rotation { get; set; } = 0;                // Угол поворота
         public Vector2 Scale { get; set; } = Vector2.One;       // Масштабирование
         public Vector2 Size { get; set; } = Vector2.Zero;       // Размер спрайта
+        public float Speed { get; set; }                        // Скорость
+        public bool IsGrounded { get; set; } = false;           // На земле ли
+        public Vector2 Velocity { get; set; } = new Vector2();  // Значение перемещения
         public Animation? Animation { get; set; }               // Анимация
         public Dictionary<string, Animation>? Animations { get; protected set; } // Список анимаций
 

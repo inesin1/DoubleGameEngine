@@ -17,28 +17,29 @@ namespace DoubleGameEngine.Core
         /// <summary>
         /// Активность физики
         /// </summary>
-        public bool Active { get; set; }
+        public bool Active { get; set; } = false;
 
         /// <summary>
         /// Значение гравитации
         /// </summary>
-        public float Gravity { get; set; }
+        public float Gravity { get; set; } = 9.8f;
 
         /// <summary>
         /// Контекст, в котором работает физика
         /// </summary>
         private GameScreen _context;
 
-        public Physics(GameScreen context) { 
+        /// <summary>
+        /// Таблица коллизий
+        /// </summary>
+        private int[,] _intGrid;
+
+        public Physics(GameScreen context, int[,] intGrid) { 
             _context = context;
+            _intGrid = intGrid;
         }
 
         public void Update(float elapsedTime) {
-            CheckCollisions(elapsedTime);
-        }
-
-        private void CheckCollisions(float elapsedTime)
-        {
             foreach (GameObject gameObject in _context.GameObjects.Values)
             {
                 Dictionary<Side, Vector2> sidesCoords = new Dictionary<Side, Vector2> {
@@ -48,19 +49,42 @@ namespace DoubleGameEngine.Core
                         { Side.Left, new Vector2(gameObject.Position.X / 16, (gameObject.Position.Y + gameObject.Size.Y / 2) / 16) }
                     };
 
-                try
+                foreach (KeyValuePair<Side, Vector2> sideCoords in sidesCoords)
                 {
-                    foreach (KeyValuePair<Side, Vector2> sideCoords in sidesCoords)
-                    {
-                        HandleIntGrid(elapsedTime, gameObject, sideCoords.Key, sideCoords.Value);
-                    }
+                    HandleIntGrid(elapsedTime, gameObject, sideCoords.Key, sideCoords.Value);
                 }
-                catch { }
+
+                gameObject.Velocity += Vector2.UnitY * Gravity;
+
+                if (!gameObject.IsGrounded)
+                    gameObject.Position += gameObject.Velocity * elapsedTime;
             }
         }
 
-        private void HandleIntGrid(float elapsedTime ,GameObject gameObject, Side side, Vector2 sideCoords) { 
-            
+        /// <summary>
+        /// Обрабатывает пересечение игрового объекта со значениями в таблице коллизий intGrid
+        /// </summary>
+        /// <param name="elapsedTime">Прошедшее время</param>
+        /// <param name="gameObject">Игровой объект</param>
+        /// <param name="side">Пересекающая сторона</param>
+        /// <param name="sideCoords">Координаты пересекающей стороны</param>
+        private void HandleIntGrid(float elapsedTime ,GameObject gameObject, Side side, Vector2 sideCoords) {
+            try
+            {
+                switch (_intGrid[(int)sideCoords.Y / 16, (int)sideCoords.X / 16])
+                {
+                    case 1:
+                        switch (side)
+                        {
+                            case Side.Bottom:
+                                gameObject.IsGrounded = true;
+                                gameObject.Velocity = new Vector2(gameObject.Velocity.X, 0);
+                                break;
+                        }
+                        break;
+                }
+            }
+            catch { }
         }
     }
 }

@@ -13,7 +13,8 @@ namespace DoubleGameEngine.GameScreens
 {
     public class GameScreen : MonoGame.Extended.Screens.GameScreen
     {
-        public new Game Game => base.Game as Game;
+        public new Core.Game Game => base.Game as Core.Game;
+        public Physics Physics { get; set; }                                             // Физика
         public SpriteBatch SpriteBatch => Game.SpriteBatch;
         public OrthographicCamera Camera;                                                // Камера
         public Texture2D Background { get; set; }                                        // Текстура заднего фона
@@ -27,7 +28,7 @@ namespace DoubleGameEngine.GameScreens
         protected List<Entity> _entities;
         protected int[,] _intGrid;
 
-        public GameScreen(Game game) : base(game) { Initialize(); }
+        public GameScreen(Core.Game game) : base(game) { Initialize(); }
 
         public override void Initialize() {
             Camera = new OrthographicCamera(GraphicsDevice);
@@ -48,6 +49,8 @@ namespace DoubleGameEngine.GameScreens
                     }
                 }
             }
+
+            Physics = new Physics(this, _intGrid);
         }
 
         public override void Update(GameTime gameTime) {
@@ -60,6 +63,8 @@ namespace DoubleGameEngine.GameScreens
             {
                 interfaceItem.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
             }
+
+            Physics.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
         }
 
         public override void Draw(GameTime gameTime)

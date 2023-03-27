@@ -8,8 +8,7 @@ namespace DoubleGameEngine
 {
     public static class Variables
     {
-        public static int WindowWidth { get; set; }
-        public static int WindowHeight { get; set; }
-        public static float Gravity { get; set; }
+        public static int WindowWidth { get; set; } = 1280;
+        public static int WindowHeight { get; set; } = 720;
     }
 }
