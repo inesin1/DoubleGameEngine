@@ -34,7 +34,17 @@ namespace DoubleGameEngine.GameObjects
         }
         Texture2D texture;
         public float Rotation { get; set; } = 0;                // Угол поворота
-        public Vector2 Scale { get; set; } = Vector2.One;       // Масштабирование
+        Vector2 scale = Vector2.One;
+        public Vector2 Scale                                    // Масштабирование
+        {
+            get {
+                return scale;
+            }
+            set {
+                scale = value;
+                Size *= value;
+            } 
+        }        
         public Vector2 Size { get; set; } = Vector2.Zero;       // Размер спрайта
         public float Speed { get; set; }                        // Скорость
         public bool IsGrounded { get; set; } = false;           // На земле ли
@@ -61,8 +71,6 @@ namespace DoubleGameEngine.GameObjects
         /// </summary>
         public virtual void Update(float elapsedTime)
         {
-            Size *= Scale;
-
             Animation?.Update(elapsedTime);
         }
 

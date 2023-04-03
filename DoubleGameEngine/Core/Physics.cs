@@ -22,7 +22,7 @@ namespace DoubleGameEngine.Core
         /// <summary>
         /// Значение гравитации
         /// </summary>
-        public float Gravity { get; set; } = 9.8f;
+        public float Gravity { get; set; } = 2.5f;
 
         /// <summary>
         /// Контекст, в котором работает физика
@@ -46,20 +46,19 @@ namespace DoubleGameEngine.Core
                     continue;
                 }
 
+                gameObject.Velocity += Vector2.UnitY * Gravity;
+
                 Dictionary<Side, Vector2> sidesCoords = new Dictionary<Side, Vector2> {
-                        { Side.Top, new Vector2((gameObject.Position.X + gameObject.Size.X / 2) / 16, gameObject.Position.Y / 16) },
-                        { Side.Right, new Vector2((gameObject.Position.X + gameObject.Size.X) / 16, (gameObject.Position.Y + gameObject.Size.Y / 2) / 16) },
-                        { Side.Bottom, new Vector2((gameObject.Position.X + gameObject.Size.X / 2) / 16, (gameObject.Position.Y + gameObject.Size.Y) / 16 ) },
-                        { Side.Left, new Vector2(gameObject.Position.X / 16, (gameObject.Position.Y + gameObject.Size.Y / 2) / 16) }
+                        { Side.Top, new Vector2((gameObject.Position.X + gameObject.Size.X / 2), gameObject.Position.Y) },
+                        { Side.Right, new Vector2((gameObject.Position.X + gameObject.Size.X), (gameObject.Position.Y + gameObject.Size.Y / 2)) },
+                        { Side.Bottom, new Vector2((gameObject.Position.X + gameObject.Size.X / 2), (gameObject.Position.Y + gameObject.Size.Y) ) },
+                        { Side.Left, new Vector2(gameObject.Position.X, (gameObject.Position.Y + gameObject.Size.Y / 2)) }
                     };
 
                 foreach (KeyValuePair<Side, Vector2> sideCoords in sidesCoords)
                 {
                     HandleIntGrid(elapsedTime, gameObject, sideCoords.Key, sideCoords.Value);
                 }
-
-                if (!gameObject.IsGrounded)
-                    gameObject.Velocity += Vector2.UnitY * Gravity;
 
                 gameObject.Position += gameObject.Velocity * elapsedTime;
             }
@@ -75,13 +74,20 @@ namespace DoubleGameEngine.Core
         private void HandleIntGrid(float elapsedTime ,GameObject gameObject, Side side, Vector2 sideCoords) {
             try
             {
-                switch (_intGrid[(int)sideCoords.Y / 16, (int)sideCoords.X / 16])
+                switch (_intGrid[(int)(sideCoords.Y + gameObject.Velocity.Y) / 16, (int)sideCoords.X / 16])
                 {
                     case 1:
                         switch (side)
                         {
                             case Side.Bottom:
-                                gameObject.IsGrounded = true;
+                                Console.WriteLine("Упал на жопу");
+
+                                while (!PlaceMeeting(sideCoords.X, sideCoords.Y, 1)) {
+                                    gameObject.Position += Vector2.UnitY;
+                                }
+
+                               
+                                //gameObject.IsGrounded = true;
                                 gameObject.Velocity = new Vector2(gameObject.Velocity.X, 0);
                                 break;
                         }
@@ -89,6 +95,15 @@ namespace DoubleGameEngine.Core
                 }
             }
             catch { }
+        }
+
+
+        public bool PlaceMeeting(float x, float y, Type objectType) {
+            return true;
+        }
+
+        public bool PlaceMeeting(float x, float y, int intGridNum) {
+            return _intGrid[(int)y / 16, (int)x / 16] == intGridNum;
         }
     }
 }

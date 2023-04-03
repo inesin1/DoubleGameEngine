@@ -457,6 +457,7 @@
       "sources": {
         "C:\\Artem\\packages": {},
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Users\\artem\\source\\repos\\DoubleGameEngine\\DoubleGameEngine\\bin\\Debug": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
